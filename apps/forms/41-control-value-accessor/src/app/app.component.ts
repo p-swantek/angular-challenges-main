@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
+import { FeedbackFormComponent, FormModel } from './feedback-form/feedback-form.component';
 
 @Component({
   standalone: true,
@@ -10,7 +10,7 @@ import { FeedbackFormComponent } from './feedback-form/feedback-form.component';
   `,
 })
 export class AppComponent {
-  apiCall(event: Record<string, string | null>): void {
+  apiCall(event: Partial<FormModel>): void {
     console.log(event);
   }
 }

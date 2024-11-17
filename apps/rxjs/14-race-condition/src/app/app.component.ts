@@ -17,24 +17,22 @@ import { TopicService, TopicType } from './topic.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit {
+export class AppComponent{
   title = 'rxjs-race-condition';
   dialog = inject(MatDialog);
   topicService = inject(TopicService);
-  topics: TopicType[] = [];
 
-  ngOnInit(): void {
+
+  openTopicModal() {
+
     this.topicService
       .fakeGetHttpTopic()
       .pipe(take(1))
-      .subscribe((topics) => (this.topics = topics));
-  }
+      .subscribe((topics) => this.dialog.open(TopicModalComponent, {
+        data: {
+          topics: topics,
+        },
+      }));
 
-  openTopicModal() {
-    this.dialog.open(TopicModalComponent, {
-      data: {
-        topics: this.topics,
-      },
-    });
   }
 }
