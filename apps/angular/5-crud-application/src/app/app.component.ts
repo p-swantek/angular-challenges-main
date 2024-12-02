@@ -2,14 +2,20 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Todo } from './todo';
 import { TodoStore } from './todo-store';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatProgressSpinner],
   selector: 'app-root',
   template: `
 
-    @for (todo of todoStore.currentTodos(); track $index) {
+    @if (todoStore.allTodosLoading()) {
+      <mat-spinner/>
+    }
+
+    @else {
+      @for (todo of todoStore.currentTodos(); track todo.id) {
       <div >
           {{ todo.title }}
         <button (click)="update(todo)">Update</button>
@@ -17,6 +23,9 @@ import { TodoStore } from './todo-store';
 
       </div>
     }
+    }
+
+
 
   `,
   providers: [TodoStore]

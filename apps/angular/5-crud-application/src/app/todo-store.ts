@@ -1,17 +1,24 @@
-import { computed, inject, Injectable, signal } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
+import { randText } from "@ngneat/falso";
 import { Todo } from "./todo";
 import { TodoService } from "./todo.service";
-import { randText } from "@ngneat/falso";
+import { delay, finalize, tap } from "rxjs";
 
 @Injectable()
-export class TodoStore {
+export class TodoStore{
   private  todoService = inject(TodoService);
   private todos = signal<Todo[]>([]);
+  private todosLoading = signal<boolean>(false);
 
-  currentTodos = computed(() => this.todos())
+  currentTodos = this.todos.asReadonly();
+  allTodosLoading = this.todosLoading.asReadonly();
 
   constructor(){
-    this.todoService.getAllTodos().subscribe(todos => this.todos.set(todos));
+    this.todoService.getAllTodos().pipe(
+      tap(() => this.todosLoading.set(true)),
+      delay(3000),
+      finalize(() => this.todosLoading.set(false)),
+    ).subscribe(todos => this.todos.set(todos));
   }
 
 

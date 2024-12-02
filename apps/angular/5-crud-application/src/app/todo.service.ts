@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Todo } from './todo';
-import { randText } from '@ngneat/falso';
 
 @Injectable({
   providedIn: 'root'
